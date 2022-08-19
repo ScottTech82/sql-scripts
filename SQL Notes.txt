@@ -1,0 +1,134 @@
+SQL Database
+
+Open the KEYS folder find the other Table key, right click MODIFY, then in 
+Foreign Key Relationships click the expand on Tables & Columns Spec to see 
+the Primary and Foreign key assigns.
+
+
+DONT FORGET , for each line running. NO , on the last one.
+
+
+Google search use 't-sql select' to find more info online.
+
+
+Open New Query
+ -write with SELECT first and the table column names
+ -use AS to create a displayed table that does not exist.  Gives you the info requested.
+		If you want spaces in the AS column use single quotes. ('Balance Due' vs BalanceDue)
+ -then FROM (only 1 from per sql statement) from whatever table.
+ -WHERE and a statment like cant be less than 0, so put >0 
+	"WHERE InvoiceTotal - PaymentTotal - CreditTotal > 0"
+ -ORDER BY a column  -so you can order the data in a specific way.
+ -always use semi colon to end the statement ;
+ -Execute the statement
+
+	Considered a simple query since it only accesses 1 table.
+
+	* = ALL columns.
+		Use an * to identify all of the columns in a specific table. 
+	No, WHERE = ALL Rows
+		If no WHERE clause you get ALL the rows.  
+
+	Dates are typically formated 'year-month-day' (2020-01-01 to 2020-03-31).
+		always use single quotes for the date.
+ 	WHERE InvoiceDate BETWEEN '2020-01-01' AND '2020-03-31';
+
+	ORDER BY you can use desc for descending sequence.
+
+
+	WHERE (InvoiceTotal >= 100) AND (InvoiceTotal < 10000)
+
+	WHERE NOT ((InvoiceTotal >= 100 ) AND (InvoiceTotal < 10000))
+	Better is to write WHERE InvoiceTotal <= 100 OR InvoiceTotal >10000
+
+	SELECT [ALL | DISTINCT]  showing all rows with no duplicate columns.
+
+
+
+Take a look at Microsoft website for String Functions.
+
+CONCAT
+	Instead of using + for the columns
+	SELECT CONCAT(VendorContactFName, ' ', VendorContactLName)
+	better than putting + 
+
+MODULO or % in SQL
+	Provides the remainder.  If looking for divisable by a number the modulo
+	would return 0 if it is and 1 if not.
+	1 to 100 divisable by 7.  1=1 2=2 3=3 4=4 5=5 6=6 7=0 8=1 9=2,etc to 14=0.
+
+FUNCTIONS
+	SUM(InvoiceTotal)
+	Count(*) for all
+	AVG(InvoiceTotal)
+	MIN(InvoiceTotal)
+	MAX(InvoiceTotal)
+
+IN phrase
+	example: Where (VendorState = 'CA') or (VendorState = 'NJ') or (VendorState = 'DC')
+	Instead: Where VendorState IN ('CA', 'NJ', 'DC');
+	Then you can add many states instead of writing it all out.
+
+NULL
+	Either IS Null or 
+	NOT null.  Do not use =, there is no comparisons like >, etc.
+
+
+CHAPTER 4
+
+INNER JOIN
+
+	Use the alias's for the tables often.
+	exmaple: From Vendors v JOIN Invoices i 
+				ON v.vendorsid = i.vendorsid;
+
+OUTER JOIN
+
+	Use if you want all info even NULL.
+	LEFT means the one on the left I want all of
+		From Vendors LEFT JOIN Invoices -meaning all vendors even NULL.
+
+
+CROSS JOIN
+
+			
+Using UNION
+	Two separate SELECT statements or query's with 2 separate results.
+	to join the results use UNION.
+	
+	IT categorizes as A, B, C all together with different wherestatements
+	
+	You can only ORDER BY at the end of the full UNION, not each Select statement
+		
+
+CHAPTER 5
+
+
+GROUP BY
+	
+	Grouping data by a specific result into 1 row
+	
+	You can use any columns that are in the group by statement
+	or any aggregate function.
+		
+	You cannot have a column in SELECT if its not in Group by.
+	example: Group by VendorState.. cannot have VendorName selected.
+	because you are grouping the data by the State.
+
+	SO use GROUP BY to show all things for that one item.
+	Group By VendorState will put only 1 row for state grouping all into 1 row.
+
+HAVING
+	
+	Only works with Group By.  Group by can be by itself.
+	
+	Having does to group by data as WHERE does to the select. 
+	Having is a booleon looking at every individual group.
+
+	example saved in SQLs
+
+ROLLUP
+
+    Not really used, creates a summary row.
+    But then you have to code to ignore the summary row.
+
