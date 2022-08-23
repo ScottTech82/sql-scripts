@@ -1,0 +1,102 @@
+SQL DATABASES
+        DDL -Data Definition Language
+            (Chapter 11 thru .. )
+
+CHAPTER 11 (page 335)
+
+    Intro to DDL.
+        Will need to use create SQL Statements to build a database.
+        CANNOT use SSMS to build a databaseand Nor Azure Data Studio.
+
+    CREATE 
+        Create DATABASE <give it a name>
+        Create Table <name>
+
+    DROP  -is delete
+        Drop database <name>
+        Drop Table <name>
+    
+    ALTER  -modifies the data
+        Alter Table
+        Alter Function.
+
+    Other statements;
+        Sequence deals with primary keys and foreign keys
+        Function - we covered, but you can create specific functions.
+        Procedure - scripts that we can create and execute.
+        Triggers -forget about, will never do.
+        View -query that you want to store in the database.
+                    Join 4 tables, save it and it becomes a specific view.
+
+Rules for Object names
+
+    As in Database names or Table names, they have specific Rules
+    the first character can be Underscore _ or @ or #.  (@Vendors Table)
+    Cannot start it with a number.  (cannot do 1Vendors Table)
+
+    Dont make the names too short or too long.
+    1,2,or3 words slammed together is good.
+
+    Cant be Transact-SQL reserved keyword like SELECT, UPDATE, FROM, etc.
+
+CREATE DATABASE
+
+    Create database <name>
+        we are not using the [On [Primary] (Filename = 'file_name')] 
+        Just create database <name>
+
+        POINT to the Master database and not one of the other databases.
+
+Use Master;
+    means if I am not in the master database make sure to change to 
+    master to run the script.
+
+DROP Database IF EXISTS
+    Will drop it if it exists or nothing.
+
+Creating Tables
+
+    use master;
+
+    Drop Database if exists Bootcamp;
+
+    Create Database Bootcamp;
+
+    Use Bootcamp;
+
+    Create Table Students(
+        StudentID Int NOT NULL Primary Key Identity(1, 1),
+        FirstName varchar(30) Not Null,
+        LastName varchar(60) Not Null,
+        City varchar(60) Not Null,
+        StateCode char(2) Not Null,
+        Phone varchar(60) Not Null,
+        Email varchar(100) Null,
+        DateOfBirth date Not Null 
+    );
+    
+    Create Table GraduationRequirements (
+        ID int Not Null Primary Key Identity(1, 1),
+        StudentID int Not Null Foreign Key References Students(StudentID),
+        Topic varchar(60) Not Null,
+        Score int Null,
+        DateTaken date Null,
+    );
+
+Primary Key makes it unique, does not need to be in sequence. 
+        make sure PK has no relation to data point to, like last name may change.
+
+Create Table <name> (column-name datatype[string, int, etc] null Primary Key Identity(1, 1))
+                    --Primary Key identity(first number 1, increments of 1) -can be anything we want.
+
+Forgein Key must match the same table format as the primary key.
+        StudentID int Not Null Primary Key Identity(1, 1)
+        StudentID int Not Null Foreign Key References Students(StudentID),
+                --Need to use the References then PK Table(column)
+
+
+
+
+
+
+

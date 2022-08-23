@@ -1,4 +1,6 @@
 SQL Database
+		DML - Data Manipulation Language
+		(Chapter 2 thru Chapter 8)
 
 Open the KEYS folder find the other Table key, right click MODIFY, then in 
 Foreign Key Relationships click the expand on Tables & Columns Spec to see 
@@ -132,3 +134,214 @@ ROLLUP
     Not really used, creates a summary row.
     But then you have to code to ignore the summary row.
 
+CHAPTER 6
+
+SUBQUERY
+
+	IF you do not use a subquery you are giving a snapshot at a specific time.  Using a subquery
+	allows it to be rerun with data changes.
+
+	Select statement within a select statement that returns a value and tests against that value.
+	Can be put after SELECT, FROM, WHERE or HAVING; but not typically after HAVING.  
+	DO Not put by Group By, Order by unless using TOP, or typically HAVING.
+
+	Subquery after WHERE is called a subquery search condition or subquery predicate.
+
+	HIGHLIGHT the SubQuery to run only the subquery to test results.
+
+SUBQUERY Compare to JOIN
+
+	Rather do a subquery than a JOIN.  It's easier to adjust the query for changes.
+
+	Instead of a JOIN do an IN statement to point to the other Table.
+
+ANY ALL SOME
+
+	SOME is the same as IN.  Where column = SOME (1, 2, 3) 
+	ALL check the book examples
+
+	Greg has never used them, had to read over multiple times.
+	Always wrote it a different way on the examples.
+
+CORRELATED SUBQUERY
+
+	Joining a table to itself to provide specific data.
+	IF you do an average you get it for each particular vendor
+		Not just all vendors.
+
+	WHERE InvoiceTotal > (SELECT AVG(InvoiceTotal) FROM Invoices)
+	THIS returns all Invoices > than the Avg of the total.
+
+	WHERE InvoiceTotal > (SELECT AVG(InvoiceTotal FROM Invoices as Inv_sub
+		WHERE Inv_SUB.VendorID = Inv_MAIN.VendorID))
+	THIS returns the invoicetotal greater than average for each specific vendor.
+
+EXISTS or NOT EXISTS
+
+	Subquery to provide either a yes or no basically.
+	Do we have any invoices over 10k for ND?  
+	Rather than pull what invoices are over, write EXISTS to say Yep or Nope.
+
+DERIVED Table
+	
+	Subquery in a FROM clause.
+
+SELECT SUBQUERY
+
+	Mostly deal with WHERE subqueries but they can be in SELECT statement.
+	See example in the book
+
+COMPLEX SUBQUERY
+
+	Just take them 1 by 1, to make it easier.
+	Work with your Mentor to figure out what it is doing.
+	Don't worry too much about them at this time.
+	
+	You can give a query an alias name just like tables.
+
+CTE -Common Table Expression
+
+	Define a query, give it a name then use that name to represent it in another query.
+	Instead of doing a bunch of subqueries you can define a virtual table
+	
+	With CAVendors as (Select * FROM Vendors WHERE VendorState = 'CA')
+		Creates a table with all CA Vendors.
+	
+	Never done one in career and didnt know they existed until started teaching 
+	using the Muroch book.
+
+	Recursive means something calls itself.
+
+
+CHAPTER 7
+
+SELECT INTO
+
+	Issue with this is it does not copy the PK or FK's and will result in different data.
+	SELECT *
+	INTO VendorsCopy
+	FROM Vendors;
+	
+--->Better way to copy a table;
+		Right Click on the Table you want
+		Script Create -	It lists out the Script to create the table,
+		replace the VENDORS with VENDORSTRUECOPY or whatever the name you want throughout script.
+
+		Now you have an actual copy of the Table but no Data
+	
+	--->To get the Data in the copy table...
+		Set Identity_Insert VendorsTrueCopy on;
+			INSERT INTO VendorsTrueCopy ('Type out all column names')
+        SELECT 'Type out all column names'
+           FROM Vendors;
+		Set Identity_Insert VendorsTrueCopy off;
+
+	
+INSERT New Rows
+
+	Insert VendorsCopy (List out all columns entering data)
+	VALUES
+	(List out all data you need to add in, in the same order as the columns listed);
+
+	VendorID is not required, showing 1,1 it will generate for you.
+
+	This will insert a new row into the table.
+	You can only put the max number per Varchar listed.
+	If it allows NULL you dont have to list the column if you dont want
+	it will default to NULL.
+	If it cant be NULL you have to enter something.
+
+DEFAULT & NULL
+
+	If you want the Default value it's best to not include the column.
+	If you do include column, just type Default.
+	Same with NULL do not include it defaults to NULL
+	If you include column, type NULL.
+
+INSERT From Another Table
+
+	INSERT
+	SELECT
+	FROM
+	WHERE
+
+UPDATE
+
+	You can make some nasty mistakes.  Becareful.
+	Insert a new row is nearly fool proof.
+	MUST INCLUDE A WHERE clause to identify which rows to update.
+		If not it will update all ROWS!!!!!!
+
+	UPDATE InvoiceCopy 
+    SET PaymentDate = GetDate(),
+    PaymentTotal = InvoiceTotal - (PaymentTotal + CreditTotal)
+    WHERE InvoiceTotal - (PaymentTotal + CreditTotal) > 0;
+
+
+DELETE
+
+	DELETE VendorsCopy WHERE VendorID = (
+		SELECT VendorID
+		FROM VendorsCopy
+		WHERE VendorName like 'MAX%'
+	);
+
+	Deletes that row with that name.
+
+BEGIN TRANSACTION  (page 510 chapter 16)
+
+	Write before locking things into the database
+	So you can either commit or rollback
+
+	Rollback; to roll back the updates/deletes you made
+	Commit; to commit the updates/deletes
+	
+CHAPTER 8  --SQL Data Types
+
+	String, Numeric, Temporal (date/time)
+
+	varchar
+	decimal
+	int
+	nchar, & nvarchar -n means national or double by character set.
+		useful for other languages like chinese, japanese, etc. that have
+		symbols that are greater than 256 characters and needs 2 byte storage.
+
+	Integers Data Type -just use int.  If you need bigger number use bigint.
+		Not really using the smaller ones, unless maybe bit for boolean yes(0) or no(1)
+
+	Decimal Data Type  -typically just use decimal(18,2) 18 is default for total number length
+		the second number, 2 is for the length after decimal.
+
+	VarChar (n) -usually just use VarChar and put in the maximum string value	
+		typically 50. Varchar will only use what is needed.  CHAR uses all allocated.
+
+	DATE/time
+
+		Always have to be careful as only date is displayed, but the time will be 
+		8/23/2022 0:00:00.0000.
+
+		Time might not always show but could be included when using the 
+		GetDate() function it will record the time.  when comparing dates it could affect it.
+
+		Use hh:mi am/pm to display regular am/pm time and not 24 hour time.
+
+CONVERSION of Data
+
+	CAST
+		CAST(InvoiceDate as varchar) as newcolumnname
+		50/CAST(100 as decimal(3)) 
+			used to divide 50 into 100 with 3 decimal places.
+
+	CONVERT
+		Doesnt really like this one
+		but does turn the format into printable code with styles.
+		You just have to know the styles.
+
+	TRY_CONVERT
+		Allows you to attempt a convert and will return NULL instead of error.
+
+	FUNCTIONS
+		Put on bucket list to review them at some point.
+
+CHAPTER 9 is Functions.
