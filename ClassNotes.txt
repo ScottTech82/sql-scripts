@@ -1,0 +1,5 @@
+Using SSMS instead of Azure.
+    Azure does not have the design option when right clicking
+    Azure is not showing the databases on the left side, only folders.
+    Azure was not allowing me to run the Bootcamp script, kept getting error its open.
+    Azure font is too soft looking.

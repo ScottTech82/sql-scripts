@@ -88,13 +88,49 @@ Forgein Key must match the same table format as the primary key.
         StudentID int Not Null Foreign Key References Students(StudentID),
                 --Need to use the References then PK Table(column)
 
+UNIQUE  -is used to confirm a unique value per row. Like Phone Number.
+
+
 In Azure Studio you can use Shift+Alt+Down Arrow to copy/past a section.
         Then you can use Ctrl+Alt+Down Arrow to get Multiple Cursors and change 
         a bunch of lines all at once!!
 
 
+CREATE INDEX
+
+    Do a search query using something with an index in it, it will go find the index
+    and return the primary key.
+
+    If you do a search without index, it will go line by line looking for it.  Which could take
+    a long time if you have millions of lines.
+
+    BUT more work for updates / maintenance as the Index's have to be updated as well.
+
+    PERFORMANCE TOOL -example call government and give SSN.  Rather than it searching throughout
+        millions of SSNs to match it will find in an index then point to the primary key where the SSN is 
+        located.
+
+    CREATE INDEX IDX_FirstName       Create Index <indexname>
+        ON Students (FirstName);         ON <table (column)>;
+
+CONSTRAINTS
+
+    Using CHECK to limit the values for the column.
+    Score int Null CHECK (Score >= 0 AND Score <= 120),
 
 
+Foreign Key CONSTRAINTS
+        Automatically says no action.
+    ON DELETE {Cascade or No Action}
+    ON UPDATE {Cascade or No Action}
 
+ALTER Table
+        Typically means you are changing columns in the table.
+    Make Changes to a table that already exists.
+    Or change the columns, use ALTER.
 
+    Alter Table <table name>
+    Add CHECK (InvoiceTotal >= 1)
 
+    ALTER Table Students
+	Alter Column LastName varchar(100);

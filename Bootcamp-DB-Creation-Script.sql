@@ -11,8 +11,8 @@ Create Table Students (
     FirstName varchar(30) Not Null,
     LastName varchar(60) Not Null,
     City varchar(60) Not Null,
-    StateCode char(2) Not Null,
-    Phone varchar(60) Not Null,
+    StateCode char(2) Not Null DEFAULT 'OH',
+    Phone varchar(60) Not Null UNIQUE,
     Email varchar(100) Null,
     DateOfBirth date Not Null 
 );
@@ -21,7 +21,7 @@ Create Table GraduationRequirements (
     ID int Not Null Primary Key Identity(1, 1),
     StudentID int Not Null Foreign Key References Students(StudentID),
     Topic varchar(60) Not Null,
-    Score int Null,
+    Score int Null CHECK (Score >= 0 AND Score <= 120),
     DateTaken date Null,
 );
 
@@ -40,7 +40,7 @@ VALUES
 INSERT GraduationRequirements
 (StudentID, Topic)
 VALUES
-(1, 'Git/GitHub'),
+((SELECT StudentID FROM Students WHERE FirstName = 'Jack'), 'Git/GitHub'),
 (1, 'SQL'),
 (1, 'C#'),
 (1, 'JavaScript'),
