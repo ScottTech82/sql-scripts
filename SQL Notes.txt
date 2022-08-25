@@ -308,7 +308,9 @@ CHAPTER 8  --SQL Data Types
 		symbols that are greater than 256 characters and needs 2 byte storage.
 
 	Integers Data Type -just use int.  If you need bigger number use bigint.
-		Not really using the smaller ones, unless maybe bit for boolean yes(0) or no(1)
+		Not really using the smaller ones, unless maybe 
+		
+	Bit for boolean NO (0) or YES(1)
 
 	Decimal Data Type  -typically just use decimal(18,2) 18 is default for total number length
 		the second number, 2 is for the length after decimal.

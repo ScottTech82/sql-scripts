@@ -134,3 +134,87 @@ ALTER Table
 
     ALTER Table Students
 	Alter Column LastName varchar(100);
+
+CHAPTER 15
+
+PROCEDURES
+
+    If you cant put in a default value for parameter just use NULL
+
+    CREATE or ALTER Proc <name your procedure>
+            (do not have to put sp before the name)
+    as
+        SELECT statement
+        FROM
+            ON if Joining
+        WHERE..
+    go
+
+    exec <procedure name>;
+
+    A procedure that displays all of the invoices for a vendor.
+    
+    EXAMPLE;
+    Create or Alter Procedure InvoicesForVendor
+	    @VendorName varchar(30) = '%'  --Parameter saying anything entered in
+    as
+	    SELECT VendorName, i.*
+	    FROM Vendors v JOIN Invoices i
+		    ON v.VendorID = i.VendorID
+	    WHERE VendorName LIKE @VendorName --Parameter placed down here to search by it
+	    ORDER BY VendorName;
+    go
+
+    exec InvoicesForVendor @VendorName = '%Pr%'; --enter in the search parameter
+
+Positional Query
+     
+     EXEC InvoicesbyDateRange @MaxDate='1/31/2020', @MinDate='1/1/2020';
+        if you use the parameter name you can put them in any order.
+
+Optional Parameters
+
+    Create or Alter Procedure InvoicesByDateRange
+	@MinDate varchar(30) = NULL,
+	@MaxDate varchar(30) = NULL  --GetDate function does not work here.
+AS
+	IF @MinDate is Null
+		SET @MinDate = '01/01/1900';
+	IF @MaxDate is NULL
+		SET @MaxDate = GetDate(); --Enter GetDate function here instead for todays date as MAX.
+	SELECT *
+	FROM Invoices
+	WHERE InvoiceDate between @MinDate and @MaxDate
+	ORDER BY InvoiceDate;
+GO
+
+Exec InvoicesByDateRange @MaxDate='1/31/2020', @MinDate='1/1/2020';
+
+CREATE VARIABLE
+    Using DECLARE not data passed through but contained within the script.
+    Declare a variable to point to it in rest of your code.
+        That way you only have to change the data once on the DECLARE.
+    
+ERROR returns
+    If @PartNbr is NULL 
+        return -1;
+
+Connecting Parameters to 
+
+    USER is entering in the Vendor Code, since they dont know the Vendor ID
+    We are using a parameter of @VendorCode then changing that into ID.
+    Declaring a variable of @VendorID tying it to the VendorCode so it inserts.
+
+    Declare @VendorID int;
+
+	SELECT @VendorID = ID 
+		FROM Vendors
+		WHERE Code = @VendorCode
+
+Return
+
+    Error checking.  Once you hit Return it stops the procedure.
+
+    DECLARE @rc int;
+    EXEC @rc = AddProduct @PartNbr = 'FireTV', @Name='Fire TV', @Price=175, @VendorCode='AMAZ';
+    PRINT 'Return Code is ' + STR(@rc);

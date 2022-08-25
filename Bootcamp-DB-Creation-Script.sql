@@ -3,6 +3,7 @@ use master;
 DROP DATABASE if exists Bootcamp;
 
 CREATE DATABASE Bootcamp;
+GO
 
 use bootcamp;
 
